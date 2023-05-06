@@ -1,0 +1,18 @@
+:root,
+* {
+  --bs-body-bg: #f1f1f3 !important;
+  --bs-btn-color: #071743 !important;
+  --bs-btn-border-radius: 0 !important;
+  --bs-btn-border-color: #00000000 !important;
+  --bs-btn-active-border-color: #00000000 !important;
+  --bs-btn-disabled-border-color: #00000000 !important;
+  --bs-btn-hover-border-color: #00000000 !important;
+  --bs-btn-disabled-color: #071743 !important;
+  --bs-btn-hover-color: #071743ba !important;
+  --bs-btn-active-color: #071743 !important;
+  --bs-btn-bg: #00ff01 !important;
+  --bs-btn-disabled-bg: #00ff00a9 !important;
+  --bs-btn-hover-bg: #59ff00 !important;
+  --bs-body-font-family: "Montserrat", sans-serif !important;
+  --toastify-toast-width: 600px;
+}
