@@ -1,0 +1,15 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ubicerekognition-staging-144009-authRole",
+      "UnauthRoleArn": "arn:aws:iam::450162237051:role/amplify-ubicerekognition-staging-144009-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::450162237051:role/amplify-ubicerekognition-staging-144009-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-ubicerekognition-staging-144009-deployment",
+      "UnauthRoleName": "amplify-ubicerekognition-staging-144009-unauthRole",
+      "StackName": "amplify-ubicerekognition-staging-144009",
+      "StackId": "arn:aws:cloudformation:us-east-1:450162237051:stack/amplify-ubicerekognition-staging-144009/e68918d0-ec1b-11ed-80b1-0afaee826b9b",
+      "AmplifyAppId": "d2amo0surlxl0"
+    }
+  }
+}
