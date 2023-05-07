@@ -1,6 +1,8 @@
 import { GetObjectCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { S3Client } from "@aws-sdk/client-s3";
 import { NextRequest, NextResponse } from "next/server";
+import fs from "fs";
+
 const archiver = require("archiver");
 
 const s3Client = new S3Client({
@@ -29,14 +31,17 @@ async function listObjects(uploadPackageId) {
   }
 }
 
-async function prepareZipForDownload(uploadPackageId, objectKeys, response) {
+async function prepareZipForDownload(objectKeys) {
   return new Promise(async (resolve, reject) => {
+    // create a write stream for the output file
+    const output = fs.createWriteStream("example.zip");
     const archive = archiver("zip");
+
     archive.on("error", (err) => {
       reject(err);
     });
 
-    archive.pipe(response);
+    archive.pipe(output);
 
     for (let objectKey of objectKeys) {
       let getObjectResponse;
@@ -57,7 +62,7 @@ async function prepareZipForDownload(uploadPackageId, objectKeys, response) {
 
     archive.finalize();
     archive.on("end", () => {
-      resolve();
+      resolve(output);
     });
   });
 }
@@ -67,23 +72,14 @@ export async function POST(req) {
     const { uploadPackageId } = await req.json();
     const objectKeys = await listObjects(uploadPackageId);
     if (objectKeys.length) {
-      // // await prepareZipForDownload(uploadPackageId, objectKeys, response);
-      // console.log(
-      //   "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!---------------------------------been here 4"
-      // );
-      // return NextResponse.json({ objectKeys });
-
-      const response = new Response(
-        { objectKeys },
-        {
-          status: 200,
-          headers: {
-            "Content-Type": "application/zip",
-            "Content-Disposition": `attachment; filename=${uploadPackageId}.zip`,
-          },
-        }
-      );
-      return response;
+      const zipFile = await prepareZipForDownload(objectKeys);
+      return new Response(zipFile, {
+        status: 200,
+        headers: {
+          "Content-Type": "application/zip",
+          "Content-Disposition": `attachment; filename=${uploadPackageId}.zip`,
+        },
+      });
     } else {
       return NextResponse.json({ error: "upload package id not found" }).status(
         404
