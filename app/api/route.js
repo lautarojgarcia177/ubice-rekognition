@@ -12,10 +12,12 @@ import { NextResponse } from "next/server";
 
 // This API Route uploads photos to aws s3, there is a lambda function that then erases the photo from the upload bucket, so don't look for the uploaded picture there, instead, look for the uploaded pictures in the download bucket
 
-export const config = {
-  api: {
-    responseLimit: false,
-    bodyParser: false,
+export const segmentConfig = {
+  runtime: {
+    api: {
+      responseLimit: false,
+      bodyParser: false,
+    },
   },
 };
 
@@ -54,19 +56,19 @@ const upload = multer({
   }),
 }).array("images");
 
-export async function POST(req, res) {
+export async function POST(request) {
   req.uploadPackageId = uuidv4();
   try {
-      await new Promise((resolve, reject) => {
-        upload(req, res, (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
+    await new Promise((resolve, reject) => {
+      upload(req, res, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
       });
-      return NextResponse.json({ uploadPackageId: req.uploadPackageId });
+    });
+    return NextResponse.json({ uploadPackageId: req.uploadPackageId });
   } catch (error) {
     return NextResponse.error(error);
   }

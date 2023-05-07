@@ -31,12 +31,6 @@ async function listObjects(uploadPackageId) {
 
 async function prepareZipForDownload(uploadPackageId, objectKeys, response) {
   return new Promise(async (resolve, reject) => {
-    response.headers.append("Content-Type", "application/zip");
-    response.headers.append(
-      "Content-Disposition",
-      `attachment; filename=${uploadPackageId}.zip`
-    );
-
     const archive = archiver("zip");
     archive.on("error", (err) => {
       reject(err);
@@ -68,17 +62,28 @@ async function prepareZipForDownload(uploadPackageId, objectKeys, response) {
   });
 }
 
-export async function POST(req, res) {
+export async function POST(req) {
   try {
-    const { uploadPackageId } = req.body;
+    const { uploadPackageId } = await req.json();
     const objectKeys = await listObjects(uploadPackageId);
     if (objectKeys.length) {
-      const response = res.next();
-      await prepareZipForDownload(uploadPackageId, objectKeys, response);
-      console.log(
-        "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!---------------------------------been here 4"
+      // // await prepareZipForDownload(uploadPackageId, objectKeys, response);
+      // console.log(
+      //   "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!---------------------------------been here 4"
+      // );
+      // return NextResponse.json({ objectKeys });
+
+      const response = new Response(
+        { objectKeys },
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/zip",
+            "Content-Disposition": `attachment; filename=${uploadPackageId}.zip`,
+          },
+        }
       );
-      return NextResponse.json({ objectKeys });
+      return response;
     } else {
       return NextResponse.json({ error: "upload package id not found" }).status(
         404

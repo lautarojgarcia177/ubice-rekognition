@@ -27,18 +27,20 @@ export default function DownloadPictures() {
       if (!response.ok) {
         throw new Error("An error occurred while downloading the zip file");
       } else {
-        setSearching(false);
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute("download", `${id}.zip`);
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        toast.success(
-          "Se ha generado un comprimido con las fotos procesadas para descargar"
-        );
+        const resJson = await response.json();
+        console.log(resJson);
+        // setSearching(false);
+        // const blob = await response.blob();
+        // const url = window.URL.createObjectURL(blob);
+        // const link = document.createElement("a");
+        // link.href = url;
+        // link.setAttribute("download", `${id}.zip`);
+        // document.body.appendChild(link);
+        // link.click();
+        // link.remove();
+        // toast.success(
+        //   "Se ha generado un comprimido con las fotos procesadas para descargar"
+        // );
       }
     } catch (error) {
       console.error("Error searching S3:", error);
