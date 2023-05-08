@@ -44,7 +44,7 @@ export default function DownloadPictures() {
       }
     } catch (error) {
       console.error("Error searching S3:", error);
-      toast.error("Hubo un error " + error);
+      toast.error(error);
     }
   };
   const searchJSX = (

@@ -56,7 +56,7 @@ const upload = multer({
   }),
 }).array("images");
 
-export async function POST(request) {
+export async function POST(req) {
   req.uploadPackageId = uuidv4();
   try {
     await new Promise((resolve, reject) => {
